@@ -1,5 +1,5 @@
+#include <Adafruit_NeoPixel.h>
 #include "Color.h"
-#include <Adafruit_NeoPixel\Adafruit_NeoPixel.h>
 
 #define ALPHABET_LENGTH 26
 #define DATA_PIN 6
