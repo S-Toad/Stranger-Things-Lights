@@ -1,5 +1,4 @@
 #include <Adafruit_NeoPixel.h>
-#include "Color.h"
 
 #define ALPHABET_LENGTH 26
 #define DATA_PIN 6
@@ -10,7 +9,7 @@
 
 Adafruit_NeoPixel ledStrip = Adafruit_NeoPixel(ALPHABET_LENGTH, DATA_PIN, NEO_RGB + NEO_KHZ400);
 
-Color charColorArray[ALPHABET_LENGTH];
+uint32_t charColorArray[ALPHABET_LENGTH];
 
 String messages[20];
 int amountOfMessages;
@@ -49,10 +48,10 @@ void loop()
 		int charValue = (int)character - 97;
 
 		// Grabs the character's corresponding color
-		Color color = charColorArray[charValue];
+		uint32_t color = charColorArray[charValue];
 
 		// Sets that LED to that color
-		ledStrip.setPixelColor(charValue, color.R, color.G, color.B);
+		ledStrip.setPixelColor(charValue, color);
 
 		// Updates LEDs
 		ledStrip.show();
@@ -79,13 +78,13 @@ void addMessage(String msg)
 void createLedArray()
 {
 	// Constant Colors defined here
-	Color red = Color(255, 0, 0);
-	Color white = Color(255, 255, 255);
-	Color blue = Color(18, 82, 186);
-	Color purple = Color(177, 18, 186);
-	Color green = Color(30, 153, 55);
-	Color yellow = Color(239, 239, 21);
-	Color teal = Color(80, 208, 237);
+	uint32_t red = ledStrip.Color(255, 0, 0);
+	uint32_t white = ledStrip.Color(255, 255, 255);
+	uint32_t blue = ledStrip.Color(18, 82, 186);
+	uint32_t purple = ledStrip.Color(177, 18, 186);
+	uint32_t green = ledStrip.Color(30, 153, 55);
+	uint32_t yellow = ledStrip.Color(239, 239, 21);
+	uint32_t teal = ledStrip.Color(80, 208, 237);
 
 	// Colors are mapped to the show
 	// Where 0 = a, 1 = b, etc.
