@@ -5,10 +5,10 @@
 #define DATA_PIN 6
 
 // milliseconds
-#define LETTER_DELAY 250
-#define MESSAGE_DELAY 20000
+#define LETTER_DELAY 750
+#define MESSAGE_DELAY 5000
 
-Adafruit_NeoPixel ledStrip = Adafruit_NeoPixel(ALPHABET_LENGTH, DATA_PIN, NEO_GRB + NEO_KHZ400);
+Adafruit_NeoPixel ledStrip = Adafruit_NeoPixel(ALPHABET_LENGTH, DATA_PIN, NEO_RGB + NEO_KHZ400);
 
 Color charColorArray[ALPHABET_LENGTH];
 
@@ -58,14 +58,16 @@ void loop()
 		ledStrip.show();
 
 		// Waits
-		delayMicroseconds(LETTER_DELAY);
+		delay(LETTER_DELAY);
 
 		// Turns LED off for next iteration
 		ledStrip.setPixelColor(charValue, 0);
 	}
 
+  ledStrip.show();
+
 	// Delays the messages
-	delayMicroseconds(MESSAGE_DELAY);
+	delay(MESSAGE_DELAY);
 }
 
 void addMessage(String msg)
