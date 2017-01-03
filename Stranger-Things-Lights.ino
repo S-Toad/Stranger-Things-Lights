@@ -1,13 +1,14 @@
 #include <Adafruit_NeoPixel.h>
 
-#define ALPHABET_LENGTH 26
+#define LED_LENGTH 50
+#define ALPHABET_LENGTH 60
 #define DATA_PIN 6
 
 // milliseconds
 #define LETTER_DELAY 750
 #define MESSAGE_DELAY 5000
 
-Adafruit_NeoPixel ledStrip = Adafruit_NeoPixel(ALPHABET_LENGTH, DATA_PIN, NEO_RGB + NEO_KHZ400);
+Adafruit_NeoPixel ledStrip = Adafruit_NeoPixel(LED_LENGTH, DATA_PIN, NEO_RGB + NEO_KHZ400);
 
 uint32_t charColorArray[ALPHABET_LENGTH];
 
@@ -41,11 +42,9 @@ void loop()
 
 	for (int i = 0; i < randomString.length(); i++)
 	{
-		char character = randomString[i];
-
 		// 97 is the int value of a, we need a to be 
 		// considered 0, b = 1, and etc.
-		int charValue = (int)character - 97;
+		int charValue = getLedValue(randomString[i]);
 
 		// Grabs the character's corresponding color
 		uint32_t color = charColorArray[charValue];
@@ -62,8 +61,7 @@ void loop()
 		// Turns LED off for next iteration
 		ledStrip.setPixelColor(charValue, 0);
 	}
-
-  ledStrip.show();
+	ledStrip.show();
 
 	// Delays the messages
 	delay(MESSAGE_DELAY);
@@ -73,6 +71,25 @@ void addMessage(String msg)
 {
 	amountOfMessages++;
 	messages[amountOfMessages - 1] = msg;
+}
+
+// This code is very specific to my setup of LEDs (How they're wrapped on the wall)
+int getLedValue(char c)
+{
+	int n = (int)c;
+
+	if (n <= 7)
+	{
+		return n;
+	}
+	else if (8 <= n && n <= 16)
+	{
+		return (28 - n);
+	}
+	else
+	{
+		return (n + 7);
+	}
 }
 
 void createLedArray()
