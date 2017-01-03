@@ -6,6 +6,7 @@
 class Color {
 public:
 	Color(int r, int g, int b);
+  Color();
 	virtual ~Color();
 
 	int R;
