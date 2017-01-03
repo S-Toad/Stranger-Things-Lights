@@ -40,7 +40,7 @@ void loop()
 
 	String randomString = messages[randMsg];
 
-	for (int i = 0; i < randomString.length; i++)
+	for (int i = 0; i < randomString.length(); i++)
 	{
 		char character = randomString[i];
 
