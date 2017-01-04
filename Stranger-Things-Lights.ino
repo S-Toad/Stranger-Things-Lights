@@ -1,12 +1,12 @@
 #include <Adafruit_NeoPixel.h>
 
 #define LED_LENGTH 50
-#define ALPHABET_LENGTH 60
+#define ALPHABET_LENGTH 26
 #define DATA_PIN 6
 
 // milliseconds
 #define LETTER_DELAY 750
-#define MESSAGE_DELAY 5000
+#define MESSAGE_DELAY 30000
 
 Adafruit_NeoPixel ledStrip = Adafruit_NeoPixel(LED_LENGTH, DATA_PIN, NEO_RGB + NEO_KHZ400);
 
@@ -17,6 +17,7 @@ int amountOfMessages;
 
 void setup()
 {
+	Serial.begin(9600);
 	// Intializes our strip
 	ledStrip.begin();
 	// Updates our LED strip
@@ -30,41 +31,18 @@ void setup()
 	// Messages are added here, they all must be lowercase
 	addMessage("run");
 	addMessage("hide");
+  addMessage("abcdefghijklmnopqrstuvwxyz");
+  addMessage("noescape");
+  addMessage("demogorgon");
 }
 
 void loop()
 {
-	// Generates a random int between 0 and the amount
-	// of the messages
-	int randMsg = rand() % amountOfMessages;
-
-	String randomString = messages[randMsg];
-
-	for (int i = 0; i < randomString.length(); i++)
-	{
-		// 97 is the int value of a, we need a to be 
-		// considered 0, b = 1, and etc.
-		int charValue = getLedValue(randomString[i]);
-
-		// Grabs the character's corresponding color
-		uint32_t color = charColorArray[charValue];
-
-		// Sets that LED to that color
-		ledStrip.setPixelColor(charValue, color);
-
-		// Updates LEDs
-		ledStrip.show();
-
-		// Waits
-		delay(LETTER_DELAY);
-
-		// Turns LED off for next iteration
-		ledStrip.setPixelColor(charValue, 0);
-	}
-	ledStrip.show();
-
-	// Delays the messages
+	showMessage();
+  delay(1000);
+	flash();
 	delay(MESSAGE_DELAY);
+  clearLEDs();
 }
 
 void addMessage(String msg)
@@ -73,10 +51,63 @@ void addMessage(String msg)
 	messages[amountOfMessages - 1] = msg;
 }
 
+void showMessage()
+{
+	// Generates a random int between 0 and the amount
+	// of the messages
+	int randMsg = random(amountOfMessages);
+
+	String randomString = messages[randMsg];
+
+	for (int i = 0; i < randomString.length(); i++)
+	{
+		// 97 is the int value of a, we need a to be
+		// considered 0, b = 1, and etc.
+		int ledValue = getLedValue(randomString[i]);
+    int charValue = (int)randomString[i] - 97;
+   
+		// Grabs the character's corresponding color
+		uint32_t color = charColorArray[charValue];
+
+		// Sets that LED to that color
+		ledStrip.setPixelColor(ledValue, color);
+
+		// Updates LEDs
+		ledStrip.show();
+
+		// Waits
+		delay(LETTER_DELAY);
+
+		// Turns LED off for next iteration
+		ledStrip.setPixelColor(ledValue, 0);
+	}
+	ledStrip.show();
+}
+
+void flash()
+{
+	for (int i = 0; i < LED_LENGTH; i++)
+	{
+		ledStrip.setPixelColor(i, charColorArray[random(ALPHABET_LENGTH)]);
+		ledStrip.show();
+	}
+}
+
+void clearLEDs()
+{
+	for (int i = 0; i < LED_LENGTH; i++)
+	{
+		ledStrip.setPixelColor(i, 0);
+	}
+
+	ledStrip.show();
+}
+
 // This code is very specific to my setup of LEDs (How they're wrapped on the wall)
 int getLedValue(char c)
 {
 	int n = (int)c;
+  n = n - 97;
 
 	if (n <= 7)
 	{
